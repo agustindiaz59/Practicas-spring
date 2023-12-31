@@ -1,0 +1,26 @@
+Aplicacion ejemplo de spring inversion de control(IoC) e inyeccion de dependencias
+Con archivo de configuracion(contexto de spring) en xml y en codigo java
+
+ 	Pasos para iniciar el contexto de spring
+	1. Abrir el archivo de configuracion
+		XML:
+			ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml"); //Abro el contenedor xml
+		Archivo java:
+			AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config.class); //Abro la clase de configuracion definida
+	2. Pedir los beans
+		Empleado empleado = context.getBean("empleado", Empleado.class);
+	3. Cerrar archivo de configuracion
+		context.close();
+
+	Anotaciones usadas
+	@Autowired para inyeccion de dependencias en constructor, setter y campos de clase
+	@Qualifier("claseConcreta") resuelve ambiguedades en interfaces con multiples implementaciones, usar con autowired
+	@Configuration para definir el contexto de spring como una clase
+	@ComponentScan("ruta.del.archivo") para escanear un paquete en busca de beans
+	@PropertySource("ruta.del.archivo") para enlazar archivo de propiedades externo
+	@Bean para definir un bean en un metodo que retorne la clase del bean, el nombre del metodo debe ser igual a la clase que retorna pero primera letra minuscula
+	@Component("ID") para definir un bean y su ID, debe ser leido por el archivo de configuracion
+	@Value(${nombre}) para traer propiedades de un archivo externo definido en el contexto con PropertySource
+ 	@PostConstruct para definir el metodo init del bean
+ 	@PreDestroy	para definir el metodo destroy del bean
+ 	@Scope("singleton"||"prototype") patron de creacion de los beans, por defecto usa singleton

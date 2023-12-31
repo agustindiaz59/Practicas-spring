@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+    http://www.springframework.org/schema/beans   
+    http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <!-- Enlaze a archivo externo de datos -->
+    <context:property-placeholder location="maestros.properties"></context:property-placeholder>
+
+    <!-- Creacion de las dependencias -->
+    <bean id="informeDia" class="com.spring.spring.informes.InformeDia"></bean>
+
+    <!-- Creacion de los beans de las clases -->
+
+    <!-- init-method y destroy-method, metodos a ejecutar antes de tener el bean a disposicion y despues de usarlo -->
+    <bean id="director" class="com.spring.spring.empleados.Director" init-method="init" destroy-method="destroy">
+        <!-- Inyecccion de dependencia por argumento del constructor -->
+        <constructor-arg ref="informeDia"></constructor-arg>
+    </bean>
+
+    <!-- scope para definir el patron de creacion de beans, singleton(por defecto) o prototype -->
+    <bean id="conserje" class="com.spring.spring.empleados.Conserje" scope="prototype">
+        <!-- Inyeccion de dependencias por setter, el name debe ser igual al metodo setter, pero sin el set y con primera letra minuscula -->
+        <property name="informe" ref="informeDia"></property>
+        <property name="email" value="equipolimpieza@hotmail.com"></property>
+    </bean>
+
+    <bean id="maestro" class="com.spring.spring.empleados.Maestro">
+        <constructor-arg ref="informeDia"></constructor-arg>
+        <!-- Trae este campo mediante el archivo externo mediante biding -->
+        <property name="materia" value="${materia}"></property>
+    </bean>
+</beans>
